@@ -1,0 +1,178 @@
+
+    {% extends 'layouts/base.html' %}
+    {% load static %}
+    {% block title %} Subscriptions {% endblock title %}
+    {% block stylesheets %}{% endblock stylesheets %}
+    {% block content %}
+    <div class="container-fluid py-4">
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+
+            <div class="card-header">
+              <h5 class="mb-0">Subscriptions</h5>
+              <p class="text-sm mb-0">
+                Manage all your subscriptions here.
+              </p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-flush" id="datatable-search">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Last Renewed</th>
+                    <th>Expire On</th>
+                    <th>Expire In</th>
+                    <th>Amount</th>
+                    <th>Created</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for subscription in subscriptions %}
+                  <tr>
+                    <td class="text-sm font-weight-normal">{{ subscription.subscription.name }}</td>
+                    <td class="text-sm font-weight-normal">{{ subscription.subscription.category.name }}</td>
+                    <td class="text-sm font-weight-normal">{{ subscription.start_date }}</td>
+                    
+                    <td class="align-middle text-start text-sm">
+                      <span class="badge badge-lg {% if subscription.age_in_days > 7 %} badge-success {% elif subscription.age_in_days <= 7 and subscription.age_in_days > 4 %} badge-warning {% else %} badge-danger {% endif %}">{{ subscription.end_date }}</span>
+                    </td>
+                    <td class="text-sm font-weight-normal"> {% if subscription.age_in_days < 1 %}N/A{% elif subscription.age_in_days == 1 %}{{ subscription.age_in_days }} Day{% else %}{{ subscription.age_in_days }} Days {% endif %}</td>
+                    <td class="text-sm font-weight-normal">{{ subscription.amount }}</td>
+                    <td class="text-sm font-weight-normal">{{ subscription.created_at }}</td>
+                    <td class="text-sm font-weight-normal">Renew</td>
+                  </tr>
+                  {% endfor %}
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% include "includes/footer.html" %}
+    
+    </div>
+    {% endblock content %}
+
+
+  <!-- <div class="fixed-plugin">
+    <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+      <i class="fa fa-cog py-2"> </i>
+    </a>
+    <div class="card shadow-lg blur">
+      <div class="card-header pb-0 pt-3  bg-transparent ">
+        <div class="float-start">
+          <h5 class="mt-3 mb-0">Soft UI Configurator</h5>
+          <p>See our dashboard options.</p>
+        </div>
+        <div class="float-end mt-4">
+          <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
+            <i class="fa fa-close"></i>
+          </button>
+        </div>
+
+      </div>
+      <hr class="horizontal dark my-1">
+      <div class="card-body pt-sm-3 pt-0">
+
+        <div>
+          <h6 class="mb-0">Sidebar Colors</h6>
+        </div>
+        <a href="javascript:void(0)" class="switch-trigger background-color">
+          <div class="badge-colors my-2 text-start">
+            <span class="badge filter bg-gradient-primary active" data-color="primary"
+              onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-dark" data-color="dark" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-info" data-color="info" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-success" data-color="success" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-warning" data-color="warning" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-danger" data-color="danger" onclick="sidebarColor(this)"></span>
+          </div>
+        </a>
+
+        <div class="mt-3">
+          <h6 class="mb-0">Sidenav Type</h6>
+          <p class="text-sm">Choose between 2 different sidenav types.</p>
+        </div>
+        <div class="d-flex">
+          <button class="btn bg-gradient-primary w-100 px-3 mb-2 active" data-class="bg-transparent"
+            onclick="sidebarType(this)">Transparent</button>
+          <button class="btn bg-gradient-primary w-100 px-3 mb-2 ms-2" data-class="bg-white"
+            onclick="sidebarType(this)">White</button>
+        </div>
+        <p class="text-sm d-xl-none d-block mt-2">You can change the sidenav type just on desktop view.</p>
+
+        <div class="mt-3">
+          <h6 class="mb-0">Navbar Fixed</h6>
+        </div>
+        <div class="form-check form-switch ps-0">
+          <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed" onclick="navbarFixed(this)">
+        </div>
+        <hr class="horizontal dark mb-1 d-xl-block d-none">
+        <div class="mt-2 d-xl-block d-none">
+          <h6 class="mb-0">Sidenav Mini</h6>
+        </div>
+        <div class="form-check form-switch ps-0 d-xl-block d-none">
+          <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarMinimize"
+            onclick="navbarMinimize(this)">
+        </div>
+        <hr class="horizontal dark mb-1 d-xl-block d-none">
+        <div class="mt-2 d-xl-block d-none">
+          <h6 class="mb-0">Light/Dark</h6>
+        </div>
+        <div class="form-check form-switch ps-0 d-xl-block d-none">
+          <input class="form-check-input mt-1 ms-auto" type="checkbox" id="dark-version" onclick="darkMode(this)">
+        </div>
+        <hr class="horizontal dark my-sm-4">
+        <a class="btn bg-gradient-info w-100" href="https://themes.getbootstrap.com/product/soft-ui-dashboard-pro/">Buy
+          now</a>
+        <a class="btn btn-outline-dark w-100"
+          href="https://www.deepakradhakrishnan.in/learning-lab/bootstrap-marketplace/overview/soft-ui-dashboard">View
+          documentation</a>
+        <div class="w-100 text-center">
+          <a class="github-button" href="https://github.com/creativetimofficial/ct-soft-ui-dashboard-pro"
+            data-icon="octicon-star" data-size="large" data-show-count="true"
+            aria-label="Star creativetimofficial/soft-ui-dashboard on GitHub">Star</a>
+          <h6 class="mt-3">Thank you for sharing!</h6>
+          <a href="https://twitter.com/intent/tweet?text=Check%20Soft%20UI%20Dashboard%20PRO%20made%20by%20%40CreativeTim%20%23webdesign%20%23dashboard%20%23bootstrap5&amp;url=https%3A%2F%2Fwww.creative-tim.com%2Fproduct%2Fsoft-ui-dashboard-pro"
+            class="btn btn-dark mb-0 me-2" target="_blank">
+            <i class="fab fa-twitter me-1" aria-hidden="true"></i> Tweet
+          </a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.deepakradhakrishnan.in/product/soft-ui-dashboard-pro"
+            class="btn btn-dark mb-0 me-2" target="_blank">
+            <i class="fab fa-facebook-square me-1" aria-hidden="true"></i> Share
+          </a>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  {% block javascripts %}
+  <script src="{% static 'js/plugins/datatables.js' %}"></script>
+
+  <script src="{% static 'js/plugins/dragula/dragula.min.js' %}"></script>
+  <script src="{% static 'js/plugins/jkanban/jkanban.js' %}"></script>
+  <script>
+    // const dataTableBasic = new simpleDatatables.DataTable("#datatable-basic", {
+    //   searchable: false,
+    //   fixedHeight: true
+    // });
+
+    const dataTableSearch = new simpleDatatables.DataTable("#datatable-search", {
+      searchable: true,
+      fixedHeight: true
+    });
+  </script>
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  {% endblock javascripts %}
